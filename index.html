@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Favorite Person ❤️</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #fff;
+  --pink: #ffb6cf;
+  --gold: #ffe59a;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: white;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #20002c;
+}
+
+#confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.slide {
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
+  padding: 22px 15px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow-y: auto;
+  position: relative;
+}
+
+.slide.active {
+  display: flex;
+  animation: enter 0.65s ease both;
+}
+
+.content {
+  width: 100%;
+  max-width: 540px;
+  padding: 30px 22px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 28px;
+  background: rgba(255,255,255,.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 15px 45px rgba(0,0,0,.2);
+  position: relative;
+  z-index: 2;
+}
+
+.page {
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  opacity: .85;
+}
+
+.big-emoji {
+  font-size: clamp(65px, 17vw, 100px);
+  margin-bottom: 17px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+h1 {
+  font-size: clamp(30px, 8vw, 48px);
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: clamp(24px, 6vw, 34px);
+  margin-bottom: 18px;
+  line-height: 1.3;
+}
+
+p {
+  font-size: clamp(15px, 4vw, 18px);
+  line-height: 1.85;
+  margin-bottom: 22px;
+}
+
+.highlight {
+  color: #ffe59a;
+}
+
+.signature {
+  color: #ffe0ed;
+  font-size: 15px;
+  font-style: italic;
+  margin-top: 18px;
+}
+
+button {
+  border: 0;
+  min-height: 48px;
+  padding: 13px 20px;
+  margin: 5px 3px;
+  border-radius: 50px;
+  background: #fff;
+  color: #7d174c;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 5px 18px rgba(0,0,0,.15);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(.97);
+}
+
+.next {
+  background: #ffe59a;
+  color: #592044;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+}
+
+.dot.active {
+  background: white;
+  transform: scale(1.4);
+}
+
+.floating {
+  position: absolute;
+  z-index: 1;
+  font-size: clamp(23px, 6vw, 38px);
+  pointer-events: none;
+  animation: float 5s ease-in-out infinite;
+  opacity: .7;
+}
+
+.f1 { top: 7%; left: 7%; }
+.f2 { top: 13%; right: 7%; animation-delay: 1s; }
+.f3 { bottom: 8%; left: 9%; animation-delay: 2s; }
+.f4 { bottom: 10%; right: 8%; animation-delay: .6s; }
+
+.small-note {
+  font-size: 13px;
+  opacity: .8;
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* Slide 1: Sweet pink */
+#slide1 {
+  background: linear-gradient(135deg, #ff758c, #ff7eb3, #c471ed);
+}
+#slide1 h1 { color: #fff3a5; }
+
+/* Slide 2: Dreamy purple */
+#slide2 {
+  background: linear-gradient(135deg, #240046, #7209b7, #e0aaff);
+}
+#slide2 .content {
+  border-radius: 45px 12px 45px 12px;
+}
+
+/* Slide 3: Romantic red */
+#slide3 {
+  background: linear-gradient(135deg, #590d22, #a4133c, #ff4d6d);
+}
+#slide3 .content {
+  border: 1px solid rgba(255,220,230,.6);
+}
+
+/* Slide 4: Midnight blue */
+#slide4 {
+  background: linear-gradient(135deg, #03045e, #4361ee, #7209b7);
+}
+#slide4 h1 { color: #ffe59a; }
+
+/* Slide 5: Peach and rose */
+#slide5 {
+  background: linear-gradient(135deg, #ff9966, #ff5e62, #ffb6c1);
+}
+#slide5 .content {
+  background: rgba(100,20,50,.19);
+}
+
+/* Slide 6: Lavender dream */
+#slide6 {
+  background: linear-gradient(135deg, #614385, #516395, #b8c0ff);
+}
+#slide6 .content {
+  border-radius: 55px;
+}
+
+/* Slide 7: Grand birthday finale */
+#slide7 {
+  background: linear-gradient(135deg, #20002c, #6a0572, #ab174c);
+}
+#slide7 h1 {
+  color: #ffe59a;
+  text-shadow: 0 0 20px rgba(255,229,154,.6);
+}
+
+@keyframes enter {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-20px) rotate(8deg); }
+}
+
+@media (max-width: 400px) {
+  .content { padding: 25px 15px; }
+  .page { letter-spacing: 2px; }
+  button { padding: 12px 17px; }
+}
+
+@media (max-height: 650px) {
+  .slide { align-items: flex-start; }
+  .content { margin: auto 0; padding: 22px 16px; }
+  .big-emoji { font-size: 58px; margin-bottom: 10px; }
+  .page { margin-bottom: 12px; }
+  p { line-height: 1.65; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- SLIDE 1 -->
+<section class="slide active" id="slide1">
+  <span class="floating f1">💗</span>
+  <span class="floating f2">🎀</span>
+  <span class="floating f3">🦋</span>
+  <span class="floating f4">💕</span>
+
+  <div class="content">
+    <div class="page">01 / 07 · A Little Surprise</div>
+    <div class="big-emoji">🎁</div>
+
+    <h1><span class="highlight">Happy Birthday andi❤️</span> </h1>
+
+    <p>
+       You deserves a day full of magic, smiles, and unforgettable moments. 💗
+       <br>
+      Enjoy your day💗
+    </p>
+
+    <div class="buttons">
+      <button class="next" onclick="nextSlide()">
+        Open your Surprise 💌 →
+      </button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide" id="slide2">
+  <span class="floating f1">🌙</span>
+  <span class="floating f2">💜</span>
+  <span class="floating f3">✨</span>
+  <span class="floating f4">🫶🏻</span>
+
+  <div class="content">
+    <div class="page">02 / 07 · From My Heart</div>
+    <div class="big-emoji">🥹💗</div>
+
+    <h2>You Mean So Much to Me</h2>
+
+    <p>
+      I want to be someone who makes you feel appreciated, understood, and cared for. 🫂
+      <br><br>
+      I might not always find the right words, but my care for you is always genuine💗.</span> 🫂
+      <br><br>
+      No matter the distance, you’ll always have a special place in my heart. 🌙❤️
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Back</button>
+      <button class="next" onclick="nextSlide()">Next Page 💕 →</button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide" id="slide3">
+  <span class="floating f1">💋</span>
+  <span class="floating f2">❤️</span>
+  <span class="floating f3">🫂</span>
+  <span class="floating f4">💞</span>
+
+  <div class="content">
+    <div class="page">03 / 07 · A Romantic Wish</div>
+    <div class="big-emoji">😘❤️</div>
+
+    <h2>A wish from my heart❤️...</h2>
+
+    <p>
+       If I were with you today, I would hold your hand, look into your eyes, and make you feel like the most loved person in the world. ❤️‍🩹✨       <br><br>
+     More than anything, I wish I could celebrate your birthday beside you, hold you close, and make memories that we would cherish forever. 🎂🫶🏻
+
+
+      <br><br>
+      <span class="highlight">
+      May your life always be filled with happiness, your heart with love, and your days with beautiful memories.💗
+      </span>
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Back</button>
+      <button class="next" onclick="nextSlide()">Keep Going 💌 →</button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide" id="slide4">
+  <span class="floating f1">🌟</span>
+  <span class="floating f2">🌙</span>
+  <span class="floating f3">💫</span>
+  <span class="floating f4">💖</span>
+
+  <div class="content">
+    <div class="page">04 / 07 · My Birthday Wish</div>
+    <div class="big-emoji">🎂✨</div>
+
+    <h2>Through Every Little Thing</h2>
+
+    <p>
+      I can't promise that every day will be perfect, but I hope we always find reasons to smile together, even on difficult days.
+      <br><br>
+     I want to celebrate your little wins, comfort you when you're tired, listen when you need someone, and remind you how special you are.
+      <br><br>
+      <span class="highlight">
+      You deserve every beautiful thing
+      this world has to offer. ❤️
+      </span>
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Back</button>
+      <button class="next" onclick="nextSlide()">One More Wish 🌷 →</button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide" id="slide5">
+  <span class="floating f1">🌹</span>
+  <span class="floating f2">💌</span>
+  <span class="floating f3">💕</span>
+  <span class="floating f4">🥰</span>
+
+  <div class="content">
+    <div class="page">05 / 07 · A Promise From My Heart</div>
+    <div class="big-emoji">🫂💋</div>
+
+    <h2>One Day, Just You and Me</h2>
+
+    <p>
+      I wish I could be in your arms right now,hug you a little tighter, kiss your forehead softly💋, feeling your warmth and forgetting about the whole world for a little while. 🫶🏻💗
+      <br><br>
+      Even though we’re far away from each other, you’re still someone I’m really looking forward to meeting someday. 🫂💕
+No distance, no missing you through a screen, just your arms around me and all the time in the world to make memories.      <br><br>
+      <span class="highlight">
+      Until then, sending you lots of virtual hugs, endless love, and the biggest birthday wishes! 💖 
+      </span>
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Back</button>
+      <button class="next" onclick="nextSlide()">Another Surprise 🧸 →</button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide" id="slide6">
+  <span class="floating f1">🦋</span>
+  <span class="floating f2">💗</span>
+  <span class="floating f3">🌷</span>
+  <span class="floating f4">😘</span>
+
+  <div class="content">
+    <div class="page">06 / 07 · Imagine This</div>
+    <div class="big-emoji">🎉🎂</div>
+
+    <h2>Time to Celebrate🎊</h2>
+
+    <p>
+May this new year of your life bring you endless happiness, beautiful opportunities, and dreams that come true.
+
+      <br><br>
+     May your smile never fade, your heart never lose hope, and your life always give you reasons to feel proud.
+      <br><br>
+      <span class="highlight">
+    Make a wish, close your eyes, and get ready for your best year yet.
+      </span>
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Back</button>
+      <button class="next" onclick="nextSlide()">Final Surprise 🎁 →</button>
+    </div>
+
+    <div class="dots"></div>
+  </div>
+</section>
+
+<!-- SLIDE 7 -->
+<section class="slide" id="slide7">
+  <span class="floating f1">🎆</span>
+  <span class="floating f2">💖</span>
+  <span class="floating f3">🎊</span>
+  <span class="floating f4">💋</span>
+
+  <div class="content">
+    <div class="page">07 / 07 · Just for You</div>
+    <div class="big-emoji">🥳❤️</div>
+
+    <h1>Happy Birthday,<br>Bavaaa😘🫂❤️</h1>
+
+    <h2 class="highlight"></h2>
+
+    <p>
+      
+      <br><br>
+      Take care of yourself, keep smiling, and remember that someone out here is waiting to meet you! 🥹💕🫂🌸
+      <br><br>
+      <span class="highlight">
+      Happy Birthday once again! 🎂🎉
+      </span>
+      <br><br>
+      
+    </p>
+
+    <div class="buttons">
+      <button class="back" onclick="prevSlide()">← Read Again</button>
+      <button class="next" onclick="celebrateAgain()">
+        🎊 Celebrate Again!
+      </button>
+    </div>
+
+    <p class="signature">Made with all my love, just for you. 💌</p>
+    <div class="dots"></div>
+  </div>
+</section>
+
+<script>
+const slides = [...document.querySelectorAll(".slide")];
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+let current = 0;
+let particles = [];
+let animationId = null;
+let lastTime = 0;
+
+const colors = [
+  "#ff4d8d", "#ffe59a", "#ffffff",
+  "#d8b4fe", "#ff8fab", "#80ffdb",
+  "#ff914d"
+];
+
+// Create seven page indicator dots.
+document.querySelectorAll(".dots").forEach((container, slideIndex) => {
+  for (let i = 0; i < slides.length; i++) {
+    const dot = document.createElement("span");
+    dot.className = "dot" + (i === slideIndex ? " active" : "");
+    container.appendChild(dot);
+  }
+});
+
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(innerWidth * dpr);
+  canvas.height = Math.floor(innerHeight * dpr);
+  canvas.style.width = innerWidth + "px";
+  canvas.style.height = innerHeight + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function showSlide(index) {
+  current = Math.max(0, Math.min(index, slides.length - 1));
+
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("active", i === current);
+  });
+
+  document.querySelectorAll(".dots").forEach(container => {
+    container.querySelectorAll(".dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === current);
+    });
+  });
+
+  // Start a new confetti burst on every slide.
+  burst(innerWidth * 0.25, innerHeight * 0.23, 65);
+  burst(innerWidth * 0.75, innerHeight * 0.23, 65);
+}
+
+function nextSlide() {
+  if (current < slides.length - 1) {
+    showSlide(current + 1);
+  }
+}
+
+function prevSlide() {
+  if (current > 0) {
+    showSlide(current - 1);
+  }
+}
+
+function celebrateAgain() {
+  // Return to the first slide and celebrate.
+  showSlide(0);
+  celebrate();
+}
+
+// Confetti particles.
+function burst(x, y, count = 100) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * 6;
+
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      gravity: 0.1 + Math.random() * 0.1,
+      size: 3 + Math.random() * 5,
+      rotation: Math.random() * 6,
+      spin: (Math.random() - 0.5) * 0.2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1,
+      decay: 0.004 + Math.random() * 0.004,
+      shape: Math.random() > 0.5 ? "rect" : "circle"
+    });
+  }
+
+  // Keep the animation lightweight for mobile devices.
+  if (particles.length > 1000) {
+    particles.splice(0, particles.length - 1000);
+  }
+
+  if (animationId === null) {
+    lastTime = 0;
+    animationId = requestAnimationFrame(animate);
+  }
+}
+
+function animate(timestamp) {
+  const dt = lastTime
+    ? Math.min((timestamp - lastTime) / 16.67, 2)
+    : 1;
+
+  lastTime = timestamp;
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+  particles = particles.filter(p => p.life > 0);
+
+  for (const p of particles) {
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += p.gravity * dt;
+    p.vx *= Math.pow(0.997, dt);
+    p.rotation += p.spin * dt;
+    p.life -= p.decay * dt;
+
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.fillStyle = p.color;
+
+    if (p.shape === "rect") {
+      ctx.fillRect(-p.size / 2, -p.size / 3,
+                   p.size, p.size * 0.7);
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  if (particles.length > 0) {
+    animationId = requestAnimationFrame(animate);
+  } else {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    animationId = null;
+    lastTime = 0;
+  }
+}
+
+function celebrate() {
+  burst(innerWidth * 0.15, innerHeight * 0.3, 120);
+  burst(innerWidth * 0.85, innerHeight * 0.3, 120);
+
+  setTimeout(() => {
+    burst(innerWidth * 0.5, innerHeight * 0.25, 140);
+  }, 250);
+
+  setTimeout(() => {
+    burst(innerWidth * 0.3, innerHeight * 0.45, 80);
+    burst(innerWidth * 0.7, innerHeight * 0.45, 80);
+  }, 550);
+}
+
+// Welcome celebration.
+window.addEventListener("load", () => {
+  setTimeout(celebrate, 350);
+});
+</script>
+
+</body>
+</html>
